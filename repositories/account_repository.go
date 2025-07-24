@@ -6,15 +6,22 @@ import (
 	"gorm.io/gorm"
 )
 
-type AccountRepository struct {
+//	type AccountRepository struct {
+//		db *gorm.DB
+//	}
+type AccountRepository interface {
+	GetAllAccounts() ([]models.Account, error)
+	GetAccountById(id int) (models.Account, error)
+}
+type accountRepository struct {
 	db *gorm.DB
 }
 
-func NewAccountRepository(db *gorm.DB) *AccountRepository {
-	return &AccountRepository{db: db}
+func NewAccountRepository(db *gorm.DB) AccountRepository {
+	return &accountRepository{db: db}
 }
 
-func (r *AccountRepository) GetAllAccounts() ([]models.Account, error) {
+func (r *accountRepository) GetAllAccounts() ([]models.Account, error) {
 	var account []models.Account
 	err := r.db.
 		Find(&account).
@@ -22,7 +29,7 @@ func (r *AccountRepository) GetAllAccounts() ([]models.Account, error) {
 	return account, err
 }
 
-func (r *AccountRepository) GetAllAccountById(id int) (models.Account, error) {
+func (r *accountRepository) GetAccountById(id int) (models.Account, error) {
 	var account models.Account
 	err := r.db.
 		Where("id", id).

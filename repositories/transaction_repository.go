@@ -8,15 +8,18 @@ import (
 	"gorm.io/gorm"
 )
 
-type TransactionRepository struct {
+type TransactionRepository interface {
+	DoTransaction(sourceAccountID int, destinationAccountID int, amount float64) error
+}
+type transactionRepository struct {
 	db *gorm.DB
 }
 
-func NewTransactionRepository(db *gorm.DB) *TransactionRepository {
-	return &TransactionRepository{db: db}
+func NewTransactionRepository(db *gorm.DB) *transactionRepository {
+	return &transactionRepository{db: db}
 }
 
-func (r *AccountRepository) DoTransaction(sourceUserID int, destinationAccountID int, amount float64) error {
+func (r *transactionRepository) DoTransaction(sourceAccountID int, destinationAccountID int, amount float64) error {
 	if amount <= 0 {
 		return errors.New("invalid amount")
 	}
@@ -24,7 +27,7 @@ func (r *AccountRepository) DoTransaction(sourceUserID int, destinationAccountID
 		// check if sender and receiver exist
 		var source models.Account
 		if err := tx.Set("gorm:query_option", "FOR UPDATE").
-			Where("id = ?", sourceUserID).
+			Where("id = ?", sourceAccountID).
 			First(&source).Error; err != nil {
 			if errors.Is(err, gorm.ErrRecordNotFound) {
 				return fmt.Errorf("source account not found: %w", err) // More specific error
@@ -45,7 +48,7 @@ func (r *AccountRepository) DoTransaction(sourceUserID int, destinationAccountID
 		}
 
 		newTransaction := models.Transaction{
-			SourceAccountID:      int64(sourceUserID),
+			SourceAccountID:      int64(sourceAccountID),
 			DestinationAccountID: int64(destinationAccountID),
 			Amount:               amount,
 		}
@@ -54,15 +57,23 @@ func (r *AccountRepository) DoTransaction(sourceUserID int, destinationAccountID
 		}
 
 		// 4. Update balances
-		if err := tx.Model(&models.Account{}).
-			Where("id = ?", sourceUserID).
-			Update("balance", gorm.Expr("balance - ?", amount)).Error; err != nil {
-			return err
+		res := tx.Model(&models.Account{}).
+			Where("id = ?", sourceAccountID).
+			Update("balance", gorm.Expr("balance - ?", amount))
+		if res.Error != nil {
+			return res.Error
 		}
-		if err := tx.Model(&models.Account{}).
+		if res.RowsAffected == 0 {
+			return errors.New("failed to update source balance")
+		}
+		resDestination := tx.Model(&models.Account{}).
 			Where("id = ?", destinationAccountID).
-			Update("balance", gorm.Expr("balance + ?", amount)).Error; err != nil {
-			return err
+			Update("balance", gorm.Expr("balance + ?", amount))
+		if resDestination.Error != nil {
+			return res.Error
+		}
+		if resDestination.RowsAffected == 0 {
+			return errors.New("failed to update destination balance")
 		}
 		return nil
 	})
