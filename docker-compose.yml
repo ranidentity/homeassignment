@@ -1,0 +1,18 @@
+version: '3.8' # Use a recent Docker Compose file format version
+
+services:
+  db:
+    image: postgres:16 # Use a specific PostgreSQL version
+    container_name: my_app_postgres_db # Name for your database container
+    restart: always # Always restart if the container stops
+    environment:
+      POSTGRES_USER: myuser        # Database username
+      POSTGRES_PASSWORD: mypassword  # Database password
+      POSTGRES_DB: mydb            # Database name
+    ports:
+      - "5432:5432" # Host_port:Container_port
+    volumes:
+      - db_data:/var/lib/postgresql/data # Mount named volume for data persistence
+
+volumes:
+  db_data: # Define the named volume
