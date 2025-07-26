@@ -1,0 +1,431 @@
+{
+	"info": {
+		"_postman_id": "49b8999f-feec-4860-9c00-53ceda22f781",
+		"name": "takehomeassignment",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "4705670"
+	},
+	"item": [
+		{
+			"name": "get account by id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/accounts/11",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"accounts",
+						"11"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "success response",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/accounts/11",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"accounts",
+								"11"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Sat, 26 Jul 2025 13:04:54 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "35"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"account_id\": 11,\n    \"balance\": \"83.25\"\n}"
+				},
+				{
+					"name": "bad input",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/accounts/dfgd",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"accounts",
+								"dfgd"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Sat, 26 Jul 2025 13:14:37 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "79"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"details\": \"Account ID must be a valid integer\",\n    \"error\": \"Invalid request data\"\n}"
+				}
+			]
+		},
+		{
+			"name": "get all accounts",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/accounts",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"accounts"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "v1",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/accounts",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"accounts"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Sat, 26 Jul 2025 04:55:41 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "420"
+						}
+					],
+					"cookie": [],
+					"body": "[\n    {\n        \"ID\": 1,\n        \"Balance\": 6207.7094,\n        \"CreatedAt\": \"2025-07-26T12:38:18.685965+08:00\",\n        \"UpdatedAt\": \"2025-07-26T12:38:18.685965+08:00\",\n        \"DeletedAt\": null\n    },\n    {\n        \"ID\": 2,\n        \"Balance\": 3697.3863,\n        \"CreatedAt\": \"2025-07-26T12:38:30.378582+08:00\",\n        \"UpdatedAt\": \"2025-07-26T12:38:30.378582+08:00\",\n        \"DeletedAt\": null\n    },\n    {\n        \"ID\": 3,\n        \"Balance\": 5592.158,\n        \"CreatedAt\": \"2025-07-26T12:38:30.378582+08:00\",\n        \"UpdatedAt\": \"2025-07-26T12:38:30.378582+08:00\",\n        \"DeletedAt\": null\n    }\n]"
+				}
+			]
+		},
+		{
+			"name": "do transactions",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"source_account_id\":11,\r\n    \"destination_account_id\":103,\r\n    \"amount\":\"50\"\r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/transactions",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"transactions"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "success empty response",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"source_account_id\":11,\r\n    \"destination_account_id\":103,\r\n    \"amount\":\"1\"\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/transactions",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"transactions"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Sat, 26 Jul 2025 13:05:17 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "4"
+						}
+					],
+					"cookie": [],
+					"body": "null"
+				},
+				{
+					"name": "sample bad input 1",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"source_account_id\":11,\r\n    \"amount\":\"1\"\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/transactions",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"transactions"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Sat, 26 Jul 2025 13:14:52 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "99"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"details\": {\n        \"DestinationAccountID\": \"DestinationAccountID is required\"\n    },\n    \"error\": \"Validation failed\"\n}"
+				}
+			]
+		},
+		{
+			"name": "create new account",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"account_id\": 2,\r\n    \"initial_balance\": \"100\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/accounts",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"accounts"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "success empty response",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"account_id\": 3,\r\n    \"initial_balance\": \"100\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/accounts",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"accounts"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Sat, 26 Jul 2025 13:10:22 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "4"
+						}
+					],
+					"cookie": [],
+					"body": "null"
+				},
+				{
+					"name": "sample bad input 1",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"account_id\": 2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/accounts",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"accounts"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Sat, 26 Jul 2025 13:16:03 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "73"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"details\": {\n        \"Balance\": \"Balance is required\"\n    },\n    \"error\": \"Validation failed\"\n}"
+				}
+			]
+		}
+	]
+}
