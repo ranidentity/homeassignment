@@ -11,7 +11,7 @@ func (Account) TableName() string {
 }
 
 type Account struct {
-	ID        int64          `gorm:"primaryKey"`
+	AccountID int64          `gorm:"primaryKey"`
 	Balance   float64        `gorm:"type:numeric(19,4);not null"`
 	CreatedAt time.Time      `gorm:"not null;default:now()"`
 	UpdatedAt time.Time      `gorm:"not null;default:now()"`

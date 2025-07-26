@@ -7,7 +7,7 @@ import (
 )
 
 func (Transaction) TableName() string {
-	return "transaction"
+	return "transactions"
 }
 
 type Transaction struct {
@@ -15,7 +15,6 @@ type Transaction struct {
 	SourceAccountID      int64          `gorm:"not null"`
 	DestinationAccountID int64          `gorm:"not null"`
 	Amount               float64        `gorm:"type:numeric(19,4);not null;check:amount > 0"`
-	Status               string         `gorm:"type:varchar(50);not null"`
 	CreatedAt            time.Time      `gorm:"not null;default:now()"`
 	UpdatedAt            time.Time      `gorm:"not null;default:now()"`
 	DeletedAt            gorm.DeletedAt `gorm:"index"`

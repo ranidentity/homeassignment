@@ -4,6 +4,8 @@ import (
 	"homeassignment/database"
 	"homeassignment/router"
 	"log"
+
+	"github.com/go-playground/validator/v10"
 )
 
 func main() {
@@ -13,7 +15,10 @@ func main() {
 		log.Fatalf("Failed to connect to db :%v", err)
 	}
 	defer database.CloseDB(db)
-	container := router.Build(db)
+	validate := validator.New()
+	// Register the custom validation function for "decimal2" tag here in main.go
+
+	container := router.Build(db, validate)
 	router := router.RegisterRoutes(container)
 
 	// Set the port for the server to listen on

@@ -27,7 +27,7 @@ func (r *transactionRepository) DoTransaction(sourceAccountID int, destinationAc
 		// check if sender and receiver exist
 		var source models.Account
 		if err := tx.Set("gorm:query_option", "FOR UPDATE").
-			Where("id = ?", sourceAccountID).
+			Where("account_id = ?", sourceAccountID).
 			First(&source).Error; err != nil {
 			if errors.Is(err, gorm.ErrRecordNotFound) {
 				return fmt.Errorf("source account not found: %w", err) // More specific error
@@ -39,7 +39,7 @@ func (r *transactionRepository) DoTransaction(sourceAccountID int, destinationAc
 		}
 		var destination models.Account
 		if err := tx.Set("gorm:query_option", "FOR UPDATE").
-			Where("id = ?", destinationAccountID).
+			Where("account_id = ?", destinationAccountID).
 			First(&destination).Error; err != nil {
 			if errors.Is(err, gorm.ErrRecordNotFound) {
 				return fmt.Errorf("destination account not found")
@@ -58,7 +58,7 @@ func (r *transactionRepository) DoTransaction(sourceAccountID int, destinationAc
 
 		// 4. Update balances
 		res := tx.Model(&models.Account{}).
-			Where("id = ?", sourceAccountID).
+			Where("account_id = ?", sourceAccountID).
 			Update("balance", gorm.Expr("balance - ?", amount))
 		if res.Error != nil {
 			return res.Error
@@ -67,7 +67,7 @@ func (r *transactionRepository) DoTransaction(sourceAccountID int, destinationAc
 			return errors.New("failed to update source balance")
 		}
 		resDestination := tx.Model(&models.Account{}).
-			Where("id = ?", destinationAccountID).
+			Where("account_id = ?", destinationAccountID).
 			Update("balance", gorm.Expr("balance + ?", amount))
 		if resDestination.Error != nil {
 			return res.Error
