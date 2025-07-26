@@ -1,0 +1,132 @@
+definitions:
+  dto.AccountDetail:
+    properties:
+      account_id:
+        type: integer
+      balance:
+        type: string
+    required:
+    - account_id
+    - balance
+    type: object
+  dto.CreateAccountRequest:
+    properties:
+      account_id:
+        type: integer
+      initial_balance:
+        minLength: 0
+        type: string
+    required:
+    - account_id
+    - initial_balance
+    type: object
+  dto.ErrorResponse:
+    properties:
+      details: {}
+      error:
+        type: string
+    type: object
+  dto.SubmitTransaction:
+    properties:
+      amount:
+        minLength: 0
+        type: string
+      destination_account_id:
+        type: integer
+      source_account_id:
+        type: integer
+    required:
+    - amount
+    - destination_account_id
+    - source_account_id
+    type: object
+info:
+  contact: {}
+paths:
+  /accounts:
+    post:
+      consumes:
+      - application/json
+      description: Create new account with initial balance. Account ID must be unique.
+      parameters:
+      - description: Account creation data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateAccountRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Account created successfully
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Account already exists
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      summary: Create new account
+      tags:
+      - accounts
+  /accounts/{account_id}:
+    get:
+      consumes:
+      - application/json
+      description: Returns a single account by ID. Account ID must be a positive integer.
+      parameters:
+      - description: Account ID (positive integer)
+        in: path
+        name: account_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Account details
+          schema:
+            $ref: '#/definitions/dto.AccountDetail'
+        "400":
+          description: Invalid account ID format
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Account doesn't exists
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      summary: Get account by ID
+      tags:
+      - accounts
+  /transactions:
+    post:
+      consumes:
+      - application/json
+      description: Transfers specified amount from source to destination account.
+        Amount must be positive with up to 2 decimal places.
+      parameters:
+      - description: Transaction details
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.SubmitTransaction'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Validation error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      summary: Submit a transaction between accounts
+      tags:
+      - transactions
+swagger: "2.0"

@@ -8,6 +8,10 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
+// @title homeassignment
+// @version 1.0
+// @host localhost:8080
+// @BasePath /
 func main() {
 	// Setup db connection
 	db, err := database.ConnectDB()

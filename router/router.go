@@ -8,8 +8,12 @@ import (
 	"net/http"
 	"regexp"
 
+	_ "homeassignment/docs"
+
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 	"gorm.io/gorm"
 )
 
@@ -25,10 +29,14 @@ type Container struct {
 
 func RegisterRoutes(container *Container) *gin.Engine {
 	r := gin.Default()
+	//external logger
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, ginSwagger.URL("/swagger/doc.json")))
+
 	r.GET("/accounts/:account_id", container.AccountHandler.GetAccountById)
 	r.GET("/accounts", container.AccountHandler.GetAccountInfo)
 	r.POST("/accounts", container.AccountHandler.CreateAccount)
 	r.POST("/transactions", container.TransactionHandler.SubmitTransaction)
+
 	return r
 
 }
