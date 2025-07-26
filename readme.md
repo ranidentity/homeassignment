@@ -1,6 +1,7 @@
 1. docker-compose up -d
-2. go mod tidy
-3. make a copy of .env from example.env
+2. run sql script to create tables - /database/sql/init.sql
+3. go mod tidy
+4. make a copy of .env from example.env
 
 
 System flow
